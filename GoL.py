@@ -30,17 +30,30 @@ def generate_circle(heart, radius):
         cor.append(y1[i])
     return cor
 
+class Cell:
+    def __init__(self, x, y, state):
+        self.x = x
+        self.y = y
+        self._tranverse()
+        self.old_state = state
+        self.new_state = state
+    def change_state(self):
+        self.state = 0 if self.state == 1 else 1
+    def _tranverse(self):
+        self.cor_x = RADIUS*(2*self.x - 1)
+        self.cor_y = RADIUS*(2*self.y - 1)
+
+    def draw(self):
+        cord = generate_circle((self.cor_x, self.cor_y), RADIUS)
+        pyglet.graphics.draw(POINT_NUMBER*2 - 2, pyglet.gl.GL_LINE_LOOP, ('v2f', tuple(cord)))
+
 @game_window.event
 def on_draw():
     game_window.clear()
-    for i in range(CELL_LEIGHT):
-        cord = generate_circle((RADIUS * i, RADIUS), RADIUS)
-#print(cord)
-        pyglet.graphics.draw(POINT_NUMBER*2 - 2, pyglet.gl.GL_LINE_LOOP, ('v2f', tuple(cord)))
-
+    cell = Cell(1,1,1)
+    cell.draw()    
 
 if __name__ == '__main__':
-    generate_circle((0, 0), 1)
     pyglet.app.run()
 
 
