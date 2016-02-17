@@ -1,13 +1,14 @@
 import pyglet
 import math
 import random
+import sys
 
 LENGTH=800
 HEIGHT=800
 FRAME_L = 600
 FRAME_H = 600
-CELL_LENGTH = 50
-CELL_HEIGHT = 50
+CELL_LENGTH = 40
+CELL_HEIGHT = 40
 POINT_NUMBER = 11
 RADIUS = 10
 cell_dict = {}
@@ -87,15 +88,15 @@ def on_draw():
        for j in range(CELL_HEIGHT):
           cell_dict[(i, j)].draw() 
 
-def update(dt):
+def update(dt, threshold=3):
     for i in range(CELL_LENGTH):
         for j in range(CELL_HEIGHT):
             cell = cell_dict[(i, j)]
             lives = check_lives(cell)
-            if lives == 2:
-                continue
-            elif lives == 3:
+            if lives <= threshold and lives >= 3:
                 cell.live()
+            elif lives == 2:
+                continue
             else:
                 cell.die()
     for i in range(CELL_LENGTH):
@@ -115,7 +116,7 @@ def check_lives(cell):
                lives += 1 
     return lives
 
-pyglet.clock.schedule_interval(update, 1/120.0)
+pyglet.clock.schedule_interval(update, 1/10.0, int(sys.argv[1]))
 if __name__ == '__main__':
     for i in range(CELL_LENGTH):
         for j in range(CELL_HEIGHT):
